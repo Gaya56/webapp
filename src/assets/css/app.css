@@ -1,0 +1,749 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300,400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 224 71.4% 4.1%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 71.4% 4.1%;
+
+    --primary: 220.9 39.3% 11%;
+    --primary-foreground: 210 20% 98%;
+
+    --secondary: 220 14.3% 95.9%;
+    --secondary-foreground: 220.9 39.3% 11%;
+
+    --muted: 220 14.3% 95.9%;
+    --muted-foreground: 220 8.9% 46.1%;
+
+    --accent: 220 14.3% 95.9%;
+    --accent-foreground: 220.9 39.3% 11%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 20% 98%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 224 71.4% 4.1%;
+
+    --radius: 0.5rem;
+
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+  }
+
+  .dark {
+    /* Same metallic background for all components */
+    --background: 215 27% 3%; /* #0a0e17 equivalent */
+    --foreground: 210 20% 98%;
+
+    /* Make cards use the same background as body for seamless integration */
+    --card: 215 27% 9%; /* Same as background */
+    --card-foreground: 210 20% 98%;
+
+    /* Make popovers use the same background */
+    --popover: 215 27% 9%; /* Same as background */
+    --popover-foreground: 210 20% 98%;
+
+    /* Purple/Blue primary colors from landing page */
+    --primary: 262 63% 66%; /* Purple equivalent to rgba(139, 92, 246) */
+    --primary-foreground: 210 20% 98%;
+
+    /* Make secondary elements blend with the background */
+    --secondary: 215 27% 12%; /* Slightly different for subtle distinction */
+    --secondary-foreground: 210 20% 98%;
+
+    --muted: 220 20% 15%; /* Slightly lighter for muted elements */
+    --muted-foreground: 218 15% 65%; /* Metallic muted text */
+
+    /* Purple accent */
+    --accent: 262 50% 25%; /* Darker purple for accents */
+    --accent-foreground: 210 20% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 20% 98%;
+
+    /* Metallic borders and inputs */
+    --border: 220 25% 25%; /* Metallic border */
+    --input: 215 27% 12%; /* Slightly lighter for inputs */
+    --ring: 262 63% 66%; /* Purple ring to match primary */
+    
+    --chart-1: 262 63% 66%; /* Purple */
+    --chart-2: 220 70% 60%; /* Blue */
+    --chart-3: 200 80% 55%; /* Cyan */
+    --chart-4: 280 65% 60%; /* Purple variant */
+    --chart-5: 240 75% 65%; /* Blue variant */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    /* Glossy metallic background with 3D depth - from landing page */
+    background: 
+      /* Top metallic shine gradient */
+      linear-gradient(135deg, 
+        rgba(168, 182, 200, 0.15) 0%, 
+        rgba(141, 160, 184, 0.1) 25%, 
+        rgba(95, 123, 158, 0.05) 50%, 
+        rgba(141, 160, 184, 0.1) 75%, 
+        rgba(168, 182, 200, 0.15) 100%
+      ),
+      /* Secondary depth layer */
+      radial-gradient(ellipse at 30% 20%, 
+        rgba(192, 206, 224, 0.08) 0%, 
+        rgba(141, 160, 184, 0.04) 40%, 
+        transparent 70%
+      ),
+      /* Ambient metallic glow */
+      radial-gradient(ellipse at 70% 80%, 
+        rgba(177, 194, 217, 0.06) 0%, 
+        rgba(95, 123, 158, 0.03) 50%, 
+        transparent 80%
+      ),
+      /* Base dark metallic gradient */
+      linear-gradient(145deg, 
+        #0a0e17 0%, 
+        #0f1419 25%, 
+        #1a1f29 50%, 
+        #0f1419 75%, 
+        #0a0e17 100%
+      );
+    color: #ffffff;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Add subtle metallic texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      /* Fine metallic grain texture */
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.03) 1px, transparent 0),
+      /* Larger metallic pattern */
+      radial-gradient(circle at 3px 3px, rgba(255,255,255,0.015) 1px, transparent 0);
+    background-size: 20px 20px, 40px 40px;
+    background-position: 0 0, 10px 10px;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  :root {
+    opacity: 0.88;
+  }
+}
+
+@layer components {
+  .input {
+    @apply p-2 text-base w-full rounded-md dark:border-neutral-800 bg-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-opacity-50;
+    /* Force dark mode inputs to use metallic background */
+    background: rgba(15, 20, 25, 0.8) !important;
+    border-color: rgba(141, 160, 184, 0.3) !important;
+  }
+
+  .input-success {
+    @apply border-green-500 text-green-500 bg-green-500/10;
+  }
+
+  .input-failed {
+    @apply border-red-500 text-red-500 bg-red-500/10;
+  }
+
+  .btn {
+    @apply flex whitespace-nowrap gap-2 text-base disabled:bg-slate-500 disabled:text-slate-400 items-center bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded;
+  }
+}
+
+html,
+body {
+  font-family: 'Inter', 'system-ui';
+}
+
+body {
+  font-size: 100%;
+}
+
+:focus-visible {
+  outline: none;
+}
+
+:root.light {
+  color-scheme: light;
+  --color-secondary: 242 242 242;
+  /* #F2F2F2 */
+  --primary-text: 48 48 48;
+  /* #303030 */
+  --secondary-text: 128 128 128;
+  /* #808080 */
+}
+
+.perspective {
+  perspective: 1000px;
+}
+
+.flashcard {
+  position: relative;
+  transform-style: preserve-3d;
+  width: 100%;
+  height: 200px;
+  cursor: pointer;
+}
+
+.flashcard-front,
+.flashcard-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.flashcard-back {
+  transform: rotateY(180deg);
+}
+
+.flashcard-content {
+  overflow-y: auto;
+  max-height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.flashcard-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.flashcard-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.flashcard-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.loading {
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: visible;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/* Transparent Overlay */
+.loading:before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* :not(:required) hides these rules from IE9 and below */
+.loading:not(:required) {
+  /* hide "loading..." text */
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+.loading:not(:required):after {
+  content: '';
+  display: block;
+  font-size: 10px;
+  width: 1em;
+  height: 1em;
+  margin-top: -0.5em;
+  -webkit-animation: spinner 1500ms infinite linear;
+  -moz-animation: spinner 1500ms infinite linear;
+  -ms-animation: spinner 1500ms infinite linear;
+  -o-animation: spinner 1500ms infinite linear;
+  animation: spinner 1500ms infinite linear;
+  border-radius: 0.5em;
+  -webkit-box-shadow:
+    rgba(139, 92, 246, 0.75) 1.5em 0 0 0,
+    rgba(139, 92, 246, 0.75) 1.1em 1.1em 0 0,
+    rgba(139, 92, 246, 0.75) 0 1.5em 0 0,
+    rgba(139, 92, 246, 0.75) -1.1em 1.1em 0 0,
+    rgba(139, 92, 246, 0.5) -1.5em 0 0 0,
+    rgba(139, 92, 246, 0.5) -1.1em -1.1em 0 0,
+    rgba(139, 92, 246, 0.75) 0 -1.5em 0 0,
+    rgba(139, 92, 246, 0.75) 1.1em -1.1em 0 0;
+  box-shadow:
+    rgba(139, 92, 246, 0.75) 1.5em 0 0 0,
+    rgba(139, 92, 246, 0.75) 1.1em 1.1em 0 0,
+    rgba(139, 92, 246, 0.75) 0 1.5em 0 0,
+    rgba(139, 92, 246, 0.75) -1.1em 1.1em 0 0,
+    rgba(139, 92, 246, 0.75) -1.5em 0 0 0,
+    rgba(139, 92, 246, 0.75) -1.1em -1.1em 0 0,
+    rgba(139, 92, 246, 0.75) 0 -1.5em 0 0,
+    rgba(139, 92, 246, 0.75) 1.1em -1.1em 0 0;
+}
+
+/* Animation */
+
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.flip-container {
+  perspective: 1000px;
+}
+
+.flip-card {
+  position: relative;
+  transform-style: preserve-3d;
+  height: 400px;
+  width: 100%;
+}
+
+.flip-card-front,
+.flip-card-back {
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.flip-card-front {
+  transform: rotateX(0deg);
+}
+
+.flip-card-back {
+  transform: rotateX(180deg);
+}
+
+.markdown-content h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.markdown-ctn code {
+  white-space: break-spaces;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  @apply text-gray-400;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror *::-moz-selection {
+  @apply bg-purple-50 text-purple-900;
+}
+
+.ProseMirror *::selection {
+  @apply bg-purple-50 text-purple-900;
+}
+
+.ProseMirror {
+  outline: none !important;
+
+  @apply font-serif;
+}
+
+.ProseMirror ul {
+  @apply list-disc mt-6 pl-8;
+}
+
+.ProseMirror ol {
+  @apply list-decimal mt-6 pl-8;
+}
+
+.ProseMirror h1 {
+  @apply mt-10 text-3xl font-semibold tracking-tighter !important;
+}
+
+.ProseMirror h1:first-child {
+  @apply mt-0 !important;
+}
+
+.ProseMirror h2:first-child {
+  @apply mt-0 !important;
+}
+
+.ProseMirror h2 {
+  @apply mt-7 text-2xl font-semibold tracking-tighter !important;
+}
+
+.ProseMirror li>p {
+  @apply mt-2 text-lg !important;
+}
+
+.ProseMirror>p {
+  @apply mt-6 text-xl !important;
+}
+
+.idea-chat-container {
+  height: calc(100vh - 145px);
+}
+
+.ProseMirror blockquote {
+  @apply mt-6 text-lg italic relative after:absolute after:content-[""] after:w-1 after:rounded-md after:bg-purple-200 after:-left-4 after:inset-y-0 !important;
+}
+
+/* Export Section */
+.export ul {
+  @apply list-disc mt-6 pl-8;
+}
+
+.export ol {
+  @apply list-decimal mt-6 pl-8;
+}
+
+.export h1 {
+  @apply mt-10 text-3xl font-semibold tracking-tighter !important;
+}
+
+.export h1:first-child {
+  @apply mt-0 font-extrabold text-4xl !important;
+}
+
+.export h2 {
+  @apply mt-7 text-2xl font-semibold tracking-tighter !important;
+}
+
+.export li>p {
+  @apply mt-2 text-lg !important;
+}
+
+.export>p {
+  @apply mt-6 text-xl !important;
+}
+
+.export blockquote {
+  @apply mt-6 text-lg italic relative after:absolute after:content-[""] after:w-1 after:rounded-md after:bg-purple-200 after:-left-4 after:inset-y-0 !important;
+}
+
+.ReactModal__Overlay {
+  opacity: 0;
+  transition: all 300ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+/* Targeting the element with the custom scrollbar */
+.custom-scrollbar {
+  overflow-y: auto;
+  /* Ensure the scrollbar is visible */
+  padding-right: 5px;
+}
+
+/* The scrollbar itself */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 12px;
+  /* Width of the scrollbar */
+  background: transparent;
+  /* Remove background */
+}
+
+/* The track (background) of the scrollbar */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(141, 160, 184, 0.2);
+  /* Metallic track color */
+  border-radius: 6px;
+  /* Rounded corners of the track */
+  margin: 2px;
+  /* Optional: Add some margin to the track to make it thinner */
+}
+
+/* The handle (thumb) of the scrollbar */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.6);
+  /* Purple thumb color */
+  border-radius: 12px;
+  /* Fully round the thumb */
+}
+
+/* Handle (thumb) on hover */
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.8);
+  /* Darker purple when hovered */
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  /* Sets the scrollbar width */
+  scrollbar-color: rgba(139, 92, 246, 0.6) transparent;
+  /* Purple thumb color and transparent track background */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.katex {
+  position: relative;
+}
+
+/* Hide the reCAPTCHA badge */
+.grecaptcha-badge {
+  visibility: hidden !important;
+}
+
+/* Style for the reCAPTCHA terms text in footer */
+.recaptcha-terms {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.recaptcha-terms a {
+  color: rgba(139, 92, 246, 1);
+  text-decoration: none;
+}
+
+.recaptcha-terms a:hover {
+  text-decoration: underline;
+}
+
+.selectable-content {
+  user-select: text;
+  -webkit-user-select: text;
+  /* For Safari */
+  -moz-user-select: text;
+  /* For Firefox */
+  -ms-user-select: text;
+  /* For IE/Edge */
+}
+
+ol {
+  list-style-type: decimal !important;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+.cl-internal-1odp14a[data-variant="solid"][data-color="primary"] {
+  box-shadow:
+    rgba(139, 92, 246, 1) 0px 0px 0px 1px,
+    /* purple outline */
+    rgba(255, 255, 255, 0.07) 0px 1px 1px 0px inset,
+    /* inner glow */
+    rgba(139, 92, 246, 0.3) 0px 2px 4px 0px,
+    /* soft purple shadow */
+    rgba(0, 0, 0, 0.2) 0px 1px 2px 0px;
+  /* light depth */
+}
+
+[data-rsbs-overlay], [data-rsbs-backdrop], [data-rsbs-root]:after {
+  z-index: 999 !important;
+}
+
+.dark ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgba(15, 20, 25, 0.6);
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(139, 92, 246, 0.6);
+  border-radius: 10px;
+  border: 3px solid rgba(15, 20, 25, 0.6);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.8);
+}
+
+.dark .markdown-body p {
+  color: white;
+}
+
+.dark [data-rsbs-overlay="true"] {
+  background-color: rgba(0, 0, 0);
+  border-top: 1px solid rgba(141, 160, 184, 0.3);
+}
+
+.dark [data-rsbs-header]:before {
+  background-color: rgba(168, 182, 200, 0.4);
+}
+
+/* Metallic surface class for components that need metallic background */
+.metallic-surface {
+  background: linear-gradient(
+    145deg,
+    rgba(168, 182, 200, 0.08) 0%,
+    rgba(141, 160, 184, 0.04) 25%,
+    rgba(95, 123, 158, 0.02) 50%,
+    rgba(141, 160, 184, 0.04) 75%,
+    rgba(168, 182, 200, 0.08) 100%
+  );
+  position: relative;
+}
+
+/* Force all shadcn components to use transparent backgrounds in dark mode */
+.dark .bg-card {
+  background: transparent !important;
+}
+
+.dark .bg-secondary {
+  background: rgba(15, 20, 25, 0.3) !important;
+}
+
+.dark .bg-muted {
+  background: rgba(15, 20, 25, 0.2) !important;
+}
+
+.dark .bg-accent {
+  background: rgba(139, 92, 246, 0.1) !important;
+}
+
+.dark button[class*="bg-secondary"] {
+  background: rgba(15, 20, 25, 0.8) !important;
+  border-color: rgba(141, 160, 184, 0.3) !important;
+}
+
+.dark .markdown-body {
+  color: white;
+}
+
+.dark .markdown-body .highlight pre, .markdown-body pre {
+  border: 1px solid rgba(141, 160, 184, 0.3);
+  color: white;
+}
