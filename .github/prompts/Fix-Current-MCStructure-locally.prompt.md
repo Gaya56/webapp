@@ -3,6 +3,9 @@ mode: agent
 ---
 Define the task to achieve, including specific requirements, constraints, and success criteria.
  
+ # main rule: use all your tools carefully and double check before and after with official docs crossreference with repositorys and official docs
+ # main rule: do not make up any code, only use existing code
+  
 # Current Infrastructure Analysis
 
 ### 1. Does the existing infrastructure work?
