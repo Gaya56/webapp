@@ -18,7 +18,7 @@ class MCPClientManager {
                 version: "1.0.0"
             });
 
-            const transport = new StreamableHTTPClientTransport(new URL(baseUrl));
+            const transport = new StreamableHTTPClientTransport(new URL(`${baseUrl}/mcp`));
             await client.connect(transport);
             console.log(`Connected to ${name} using Streamable HTTP transport`);
         } catch (error) {
