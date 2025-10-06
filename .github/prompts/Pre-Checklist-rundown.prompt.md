@@ -4,6 +4,11 @@ mode: integrator-guide
 Define the task to achieve, including specific requirements, constraints, and success criteria.
 
 ### Task: 
+- Code Quality: Check syntax, imports, linting, and build integrity
+MCP Client Verification: Validate SDK version, official patterns, SSE transport, error handling
+Integration Points: Confirm main.jsx setup, window.mcpTools population, initialization flow
+Tool Configuration: Verify tool definitions, ID mappings, OpenAI function formats, parameter schemas -> one by one keeping track of what we have done and what is left to do.
+
 - You will review your exact implementation against the provided prompt instructions `/workspaces/webapp/.github/prompts/Fix-Current-MCStructure-locally.prompt.md` using our prompt we have now implemented the MCP client integration for Archon RAG services.
 - You will go through a pre-checklist to ensure all aspects of the implementation are correct and complete.
 - You will be using all your tools available to you to ensure the implementation is correct and complete matches the repos and official docs.
