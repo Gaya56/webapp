@@ -77,7 +77,7 @@ Integrate MCP services (especially Archon RAG) with the webapp by analyzing gaps
 - **Connect to Archon MCP Server**:
   - Endpoint: `http://localhost:8051/sse` (NOT `/mcp` or WebSocket)
   - Available tools from Archon: `crawl_single_page`, `smart_crawl_url`, `perform_rag_query`, `get_available_sources`
-  - Optional tools (if Neo4j enabled): `check_ai_script_hallucinations`, `query_knowledge_graph`, `parse_github_repository`
+  - Optional tools: NOT to be integrated  (if Neo4j enabled): `check_ai_script_hallucinations`, `query_knowledge_graph`, `parse_github_repository`
 
 - **Dynamic Tool Discovery**:
   - Use `client.listTools()` to discover available tools
