@@ -1,0 +1,23 @@
+# Project Context
+This project is a web application that integrates with the Model Context Protocol (MCP) to facilitate advanced AI interactions. The application is structured to support various tools and functionalities, leveraging the MCP SDK for seamless integration.
+
+# Coding Guidelines
+- **File Structure**: Maintain a clear and organized file structure. Place components in the `src/components` directory, utilities in `src/utils`, and configurations in `src/config`.
+- **Imports**: Use absolute imports for better readability. For example, import components as `import Button from 'components/Button';` instead of relative paths.
+- **Dependencies**: Keep dependencies updated in `package.json`. Use `npm outdated` to check for updates regularly.
+- **Hooks**: Utilize React hooks for state management and side effects. Ensure hooks are called at the top level of components.
+- **Functions**: Document all functions with JSDoc comments, specifying parameters and return types.
+- **Testing**: Write unit tests for all components and utilities. Use Jest and React Testing Library for testing React components.
+- **Linting**: Follow ESLint rules and ensure code is formatted with Prettier. Run `npm run lint` before committing changes.
+
+# Documentation Summary
+- **Hooks**: The project uses React hooks for state management and side effects.
+- **File Structure**: Components are organized in `src/components`, utilities in `src/utils`, and configurations in `src/config`.
+- **Imports**: Absolute imports are preferred for better readability.
+- **Dependencies**: Regular updates to `package.json` are encouraged.
+- **Testing**: Unit tests are required for all components and utilities.
+- **Linting**: ESLint and Prettier are used for code quality.
+
+# Next Steps
+- Review the current project structure and identify any missing components or utilities.
+- Define specific tasks and success criteria for the agent in the prompt file.
