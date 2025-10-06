@@ -3,6 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import TagManager from "react-gtm-module";
 import { PostHogProvider } from "posthog-js/react";
 import ReactPixel from "react-facebook-pixel";
+import { mcpManager } from "@/lib/mcp/client.js";
 
 import router from "./lib/router";
 
@@ -40,3 +41,29 @@ root.render(
     <RouterProvider router={router} />
   </PostHogProvider>
 );
+
+// Initialize MCP after React app starts
+async function initializeMCP() {
+  try {
+    // Initialize Archon MCP server (primary target)
+    await mcpManager.initializeClient('archon', 'http://localhost:8051');
+
+    // Optionally initialize brave-search for fallback
+    // await mcpManager.initializeClient('brave-search', 'http://localhost:8052');
+
+    // Populate window.mcpTools for tool-manager.js compatibility
+    window.mcpTools = {
+      listTools: () => Promise.resolve({
+        tools: mcpManager.getAvailableTools()
+      }),
+      callTool: (name, args) => mcpManager.callTool(name, args)
+    };
+
+    console.log('MCP initialized successfully');
+  } catch (error) {
+    console.warn('MCP initialization failed, using mock responses:', error);
+  }
+}
+
+// Initialize MCP
+initializeMCP();

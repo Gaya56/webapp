@@ -15,9 +15,25 @@ export class ToolManager {
    * Initialize MCP tool functions
    * These will be injected based on available MCP capabilities
    */
-  initializeMCPTools() {
-    // MCP tools will be injected here when available
-    // For now, we'll handle this in the execution methods
+  async initializeMCPTools() {
+    try {
+      if (window.mcpTools) {
+        // Get available tools from MCP
+        const { tools } = await window.mcpTools.listTools();
+
+        // Map MCP tools to our tool format
+        tools.forEach(tool => {
+          console.log(`Available MCP tool: ${tool.name}`);
+        });
+
+        this.mcpInitialized = true;
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error('Failed to initialize MCP tools:', error);
+      return false;
+    }
   }
 
   /**
@@ -34,9 +50,13 @@ export class ToolManager {
 
     try {
       switch (toolId) {
-        case "brave-search":
-          return await this.executeBraveSearch(parameters);
-        
+        case "rag-search":
+          return await this.executeRagSearch(parameters);
+        case "code-search":
+          return await this.executeCodeSearch(parameters);
+        case "sources-list":
+          return await this.executeSourcesList(parameters);
+
         default:
           throw new Error(`Tool execution not implemented for ${toolId}`);
       }
@@ -51,70 +71,106 @@ export class ToolManager {
    * @param {Object} parameters - Search parameters
    * @returns {Promise<string>} - Search results
    */
-  async executeBraveSearch(parameters) {
-    const { query, type = "web", count = 5 } = parameters;
+  async executeRagSearch(parameters) {
+  const { query, source, match_count = 5 } = parameters;
+  
+  try {
+  if (window.mcpTools) {
+    const result = await window.mcpTools.callTool('perform_rag_query', {
+    query,
+    source,
+      match_count
+    });
     
-    try {
-      // Check if MCP tools are available globally
-      if (typeof window !== 'undefined' && window.mcpTools) {
-        return await this.executeMCPBraveSearch(window.mcpTools, query, type, count);
-      }
+    if (result.content && result.content[0]) {
+        const content = result.content[0];
+      const data = JSON.parse(content.text);
       
-      // Fallback to mock implementation for testing
-      return this.mockBraveSearch(query, type, count);
-    } catch (error) {
-      console.error("Brave Search execution error:", error);
-      throw error;
-    }
+        if (data.success && data.results) {
+            return `RAG Search Results:\n\n${data.results.map(r => 
+              `• ${r.content}\n  Source: ${r.metadata?.source || 'Unknown'}\n`
+            ).join('\n')}`;
+         }
+       }
+      }
+    
+  return `Mock RAG search for "${query}" - MCP not available`;
+  } catch (error) {
+  console.error('RAG search execution error:', error);
+  return `Error executing RAG search: ${error.message}`;
+  }
+  }
+
+  async executeCodeSearch(parameters) {
+  const { query, source_id, match_count = 5 } = parameters;
+  
+  try {
+  if (window.mcpTools) {
+      const result = await window.mcpTools.callTool('search_code_examples', {
+          query,
+          source_id,
+          match_count
+      });
+    
+    if (result.content && result.content[0]) {
+      const content = result.content[0];
+      const data = JSON.parse(content.text);
+    
+    if (data.success && data.results) {
+      return `Code Search Results:\n\n${data.results.map(r => 
+          `• ${r.content}\n  Source: ${r.metadata?.source || 'Unknown'}\n`
+            ).join('\n')}`;
+      }
+  }
+  }
+  
+  return `Mock code search for "${query}" - MCP not available`;
+  } catch (error) {
+  console.error('Code search execution error:', error);
+  return `Error executing code search: ${error.message}`;
+  }
+  }
+
+  async executeSourcesList(parameters) {
+  try {
+  if (window.mcpTools) {
+      const result = await window.mcpTools.callTool('get_available_sources', {});
+    
+    if (result.content && result.content[0]) {
+        const content = result.content[0];
+          const data = JSON.parse(content.text);
+          
+          if (data.success && data.sources) {
+          return `Available Sources (${data.count}):\n\n${data.sources.map(s => 
+            `• ${s.name || s.domain || s}\n`
+          ).join('')}`;
+      }
+  }
+  }
+  
+  return `Mock sources list - MCP not available`;
+  } catch (error) {
+  console.error('Sources list execution error:', error);
+  return `Error getting sources list: ${error.message}`;
+  }
   }
 
   /**
-   * Execute MCP Brave Search tools
-   */
-  async executeMCPBraveSearch(mcpTools, query, type, count) {
-    switch (type) {
-      case "web":
-        return await mcpTools.brave_web_search({ query, count });
-      case "news":
-        return await mcpTools.brave_news_search({ query, count });
-      case "images":
-        return await mcpTools.brave_image_search({ searchTerm: query, count: Math.min(count, 3) });
-      case "videos":
-        return await mcpTools.brave_video_search({ query, count });
-      case "local":
-        return await mcpTools.brave_local_search({ query, count });
-      default:
-        return await mcpTools.brave_web_search({ query, count });
-    }
-  }
-
-  /**
-   * Mock Brave Search for testing when MCP tools not available
-   */
-  mockBraveSearch(query, type, count) {
-    return `Mock ${type} search results for "${query}" (${count} results requested):\n\n` +
-           `🔍 Search Type: ${type}\n` +
-           `📝 Query: ${query}\n` +
-           `📊 Count: ${count}\n\n` +
-           `This is a mock response. In production, this would return actual search results from Brave Search API.`;
-  }
-
-  /**
-   * Process OpenAI function calls
+  * Process OpenAI function calls
    * @param {Array} toolCalls - Array of function calls from OpenAI
    * @returns {Promise<Array>} - Array of tool execution results
    */
   async processToolCalls(toolCalls) {
     const results = [];
-    
+
     for (const toolCall of toolCalls) {
       try {
         const { function: func } = toolCall;
         const toolId = this.mapFunctionNameToToolId(func.name);
         const parameters = JSON.parse(func.arguments);
-        
+
         const result = await this.executeTool(toolId, parameters);
-        
+
         results.push({
           tool_call_id: toolCall.id,
           content: result
@@ -127,7 +183,7 @@ export class ToolManager {
         });
       }
     }
-    
+
     return results;
   }
 
@@ -136,7 +192,9 @@ export class ToolManager {
    */
   mapFunctionNameToToolId(functionName) {
     const mapping = {
-      "brave_search": "brave-search"
+      "perform_rag_query": "rag-search",
+      "search_code_examples": "code-search",
+      "get_available_sources": "sources-list"
     };
     return mapping[functionName] || functionName;
   }
@@ -149,7 +207,6 @@ export class ToolManager {
     if (typeof window !== 'undefined') {
       window.mcpTools = mcpTools;
     }
-    this.mcpTools.set('brave-search', mcpTools);
   }
 
   /**
