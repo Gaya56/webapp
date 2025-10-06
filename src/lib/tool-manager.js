@@ -67,7 +67,7 @@ export class ToolManager {
   }
 
   /**
-   * Execute Brave Search tool using MCP tools
+   * Execute RAG Search tool using MCP tools
    * @param {Object} parameters - Search parameters
    * @returns {Promise<string>} - Search results
    */
